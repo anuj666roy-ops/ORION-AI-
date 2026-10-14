@@ -16,13 +16,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install Gradle & Build Wrapper
+      - name: Install Gradle
         run: |
           sudo apt-get update && sudo apt-get install -y gradle
-          gradle wrapper
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle :app:assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
