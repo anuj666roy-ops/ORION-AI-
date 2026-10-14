@@ -18,19 +18,18 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
 
-      - name: Install Gradle & Generate Wrapper
-        run: |
-          sudo apt-get update && sudo apt-get install -y gradle
-          gradle wrapper
-          chmod +x gradlew
+      - name: Install Gradle
+        run: sudo apt-get update && sudo apt-get install -y gradle
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle :app:assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: OrionAI-debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
-      
+          
