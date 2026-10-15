@@ -1,0 +1,10 @@
+{
+  "name": "ORION AI",
+  "short_name": "orionai",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "any",
+  "id": "com.orion.ai"
+}
