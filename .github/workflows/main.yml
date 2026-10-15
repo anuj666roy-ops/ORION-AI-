@@ -1,13 +1,44 @@
-name: build ORION AI APK:
-        on:
-                branch: [main, master]
-                pull:
-                pull request:
-                [install]
-world: 
+name: Build ORION AI APK
 
-         (future) orion ai apk
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
-all control phone app:
-(all permission with all command follow)
-(and doing)
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Bypass Android SDK License Prompt
+        run: |
+          mkdir -p $ANDROID_HOME/licenses
+          echo "24333f8a43b682ff13c56b403d39283f64c6797a" > $ANDROID_HOME/licenses/android-sdk-license
+          echo "84831b4009041f274719e81eb6597488586f74a2" >> $ANDROID_HOME/licenses/android-sdk-license
+          echo "d56f5187479451eabf01fb78af6dfcb131ed62cf" >> $ANDROID_HOME/licenses/android-sdk-license
+          echo "24333f8a43b682ff13c56b403d39283f64c6797a" > $ANDROID_HOME/licenses/android-sdk-preview-license
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OrionAI-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
